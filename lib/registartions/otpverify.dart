@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:friendly_talks/controller/loginController/OTPController.dart';
 import 'package:friendly_talks/home/home.dart';
+import 'package:get/get.dart';
 
 class Otpverify extends StatelessWidget {
   const Otpverify(
@@ -93,7 +95,8 @@ class Otpverify extends StatelessWidget {
                           ),
                           const SizedBox(height: 10),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                            },
                             child: const Text('Resend OTP'),
                           ),
                         ],

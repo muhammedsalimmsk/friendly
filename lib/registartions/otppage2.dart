@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:friendly_talks/registartions/otpverify2.dart';
+import 'package:get/get.dart';
+import '../controller/loginController/OTPController.dart';
 
 class Otppage2 extends StatelessWidget {
-   Otppage2({super.key});
+  Otppage2({super.key});
 
-  final countryController=TextEditingController();
-  final phoneController=TextEditingController();
+  final countryController = TextEditingController();
+  final phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +69,11 @@ class Otppage2 extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                     SizedBox(
+                    SizedBox(
                       width: 250,
                       child: TextField(
                         controller: countryController,
-                        decoration:const InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Country',
                           suffixIcon: Icon(Icons.location_searching_rounded),
                           labelStyle: TextStyle(fontSize: 17),
@@ -79,11 +81,11 @@ class Otppage2 extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                     SizedBox(
+                    SizedBox(
                       width: 250,
                       child: TextField(
                         controller: phoneController,
-                        decoration:const InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Mobile Number',
                           suffixIcon: Icon(Icons.phone_callback),
                           labelStyle: TextStyle(fontSize: 17),
@@ -99,7 +101,7 @@ class Otppage2 extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const Otpverify2(),
+                                const OtpVerifyNewUser(),
                           ),
                         );
                       },

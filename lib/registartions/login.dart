@@ -163,7 +163,7 @@ class Login extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => const Register(),
+                            builder: (BuildContext context) => const RegisterNewUser(),
                           ),
                         );
                       },

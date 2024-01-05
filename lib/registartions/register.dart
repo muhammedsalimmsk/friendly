@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:friendly_talks/registartions/language.dart';
 
-class Register extends StatelessWidget {
-  const Register({super.key});
+class RegisterNewUser extends StatelessWidget {
+  const RegisterNewUser({super.key});
 
   @override
   Widget build(BuildContext context) {

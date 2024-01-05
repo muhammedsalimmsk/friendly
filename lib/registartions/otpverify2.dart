@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:friendly_talks/registartions/register.dart';
+import 'package:get/get.dart';
 
-class Otpverify2 extends StatelessWidget {
-  const Otpverify2({super.key});
+import '../controller/loginController/OTPController.dart';
+class OtpVerifyNewUser extends StatelessWidget {
+  const OtpVerifyNewUser({super.key});
 
   @override
   Widget build(BuildContext context) {
     TextEditingController otpController = TextEditingController();
-
+    OTPController controller=Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -71,20 +73,14 @@ class Otpverify2 extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextField(
-                            controller: otpController,
+                            controller: controller.otpController,
                             keyboardType: TextInputType.number,
                             maxLength: 4,
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const Register(),
-                                ),
-                              );
+                             controller.verifyOTP();
                             },
                             child: const Text('Verify OTP'),
                           ),

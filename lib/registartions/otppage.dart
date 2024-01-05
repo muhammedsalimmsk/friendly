@@ -2,6 +2,8 @@
 // Import required packages
 import 'dart:convert';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
+import 'package:friendly_talks/controller/loginController/OTPController.dart';
+import 'package:friendly_talks/registartions/otpverify2.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:friendly_talks/api.dart';
@@ -10,8 +12,7 @@ import 'package:friendly_talks/registartions/otppage2.dart';
 import 'package:friendly_talks/registartions/otpverify.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/user_data/user_data.dart';
+import '../models/user_data/user_data/user_data.dart';
 
 class Otppage extends StatefulWidget {
   Otppage({
@@ -45,8 +46,8 @@ class _OtppageState extends State<Otppage> {
       final url =
           'https://friendlytalks.in/admin/api/v1/index.php?token=$API_KEY';
       final response = await http.get(Uri.parse(url));
-
-      final compinedMobile="$country$mobileNumber";
+      final countrycode=country.substring(1);
+      final compinedMobile="$countrycode$mobileNumber";
 
       if (response.statusCode == 200) {
         // final data = response.body;
@@ -56,8 +57,9 @@ class _OtppageState extends State<Otppage> {
           Get.to(Otpverify(mobileNumber: mobileNumber, countrycode: country));
           print("Mobile number exists in the UserData model.");
         } else {
-          print(compinedMobile);
-          Get.to( Otppage2());
+          controller.generateOTP(4);
+          await controller.sendOTPToAPI(controller.generatedOTP.value, compinedMobile);
+          Get.to(const OtpVerifyNewUser());
           print("Mobile number does not exist in the UserData model.");
         }
         return data;
@@ -76,10 +78,8 @@ class _OtppageState extends State<Otppage> {
 
   final phoneController = TextEditingController();
 
-
-
   final _formKey = GlobalKey<FormState>();
-
+  OTPController controller=Get.put(OTPController());
   final countryPicker = const  FlCountryCodePicker();
 
   CountryCode? countryCode;
@@ -201,19 +201,12 @@ class _OtppageState extends State<Otppage> {
                           ),
                         ],
                       ),
+
                       const SizedBox(
                         height: 30,
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Get values from the TextFields
-                          // var countryController;
-                          // final country = countryController
-                          //     .text; // Assuming you have a TextEditingController for the country field
-                          // var mobileNumberController;
-                          // final mobileNumber = mobileNumberController
-                          //     .text; // Assuming you have a TextEditingController for the mobile number field
-                          // fetchData(context, country, mobileNumber);
                           if(_formKey.currentState!.validate()) {
                             fetchData(context, countryCode!.dialCode,
                                 phoneController.text);
@@ -298,4 +291,12 @@ class _OtppageState extends State<Otppage> {
       ),
     );
   }
+
+
+
+
+
+
+
+
 }
