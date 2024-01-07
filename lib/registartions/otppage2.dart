@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:friendly_talks/registartions/otpverify2.dart';
+import 'package:friendly_talks/registartions/otpVerifyNewUser.dart';
 import 'package:get/get.dart';
 import '../controller/loginController/OTPController.dart';
 
@@ -101,7 +101,7 @@ class Otppage2 extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const OtpVerifyNewUser(),
+                                OtpVerifyNewUser(),
                           ),
                         );
                       },

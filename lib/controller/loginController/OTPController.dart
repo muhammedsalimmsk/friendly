@@ -9,13 +9,6 @@ class OTPController extends GetxController {
   RxString generatedOTP = ''.obs;
   RxBool isLoading = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Generate OTP when the controller is initialized
-    // generatedOTP.value = generateOTP(6);
-    // print('Generated OTP: ${generatedOTP.value}');
-  }
 
   void verifyOTP() {
     // Check if the entered OTP matches the generated OTP
@@ -37,15 +30,16 @@ class OTPController extends GetxController {
     for (int i = 0; i < length; i++) {
       otp += chars[random.nextInt(chars.length)];
     }
-    generatedOTP.value=otp;
+    generatedOTP.value = otp;
     return otp;
   }
 
-  Future<void> sendOTPToAPI(otpCode,phoneNumber) async {
+  Future<void> sendOTPToAPI(otpCode, phoneNumber) async {
     try {
       isLoading(true);
       // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint
-      final apiUrl = 'https://friendlytalks.in/admin/api/v1/newotp.php?token=c97369129e36336e71096aabf2270aba&mobile=$phoneNumber&otp=$otpCode';
+      final apiUrl =
+          'https://friendlytalks.in/admin/api/v1/newotp.php?token=c97369129e36336e71096aabf2270aba&mobile=$phoneNumber&otp=$otpCode';
 
       // Replace 'YOUR_API_KEY' with any authentication header or key if required by your API
       // final headers = {
@@ -68,10 +62,8 @@ class OTPController extends GetxController {
     } catch (e) {
       print('Error sending OTP to API: $e');
       // Handle the error
-    }
-    finally{
+    } finally {
       isLoading(false);
     }
   }
-
 }

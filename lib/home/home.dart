@@ -2,6 +2,8 @@
 
 // ignore: avoid_web_libraries_in_flutter
 
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 
@@ -10,14 +12,16 @@ import 'package:friendly_talks/calling/call.dart';
 import 'package:friendly_talks/calling/calling.dart';
 import 'package:friendly_talks/coins/coins.dart';
 import 'package:friendly_talks/coins/recharge.dart';
+import 'package:friendly_talks/controller/loginController/LoginController.dart';
 import 'package:friendly_talks/more/more.dart';
 import 'package:friendly_talks/moresub/listnerspage.dart';
 import 'package:friendly_talks/moresub/notifications.dart';
 import 'package:friendly_talks/moresub/profile.dart';
 import 'package:friendly_talks/talkinglist/friendly.dart';
 import 'package:friendly_talks/talkinglist/professional.dart';
+import 'package:get/get.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   final List<String> languages;
 
   const Home({
@@ -26,6 +30,11 @@ class Home extends StatelessWidget {
     required List<String> language,
   });
 
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   BuildContext? get builderContext => null;
 
   // ignore: unused_element
@@ -50,10 +59,21 @@ class Home extends StatelessWidget {
       ),
     );
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_typing_uninitialized_variables
+
+
+    LoginController loginController =Get.find();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -144,7 +164,7 @@ class Home extends StatelessWidget {
                       ),
                     );
                   },
-                  child: const Row(
+                  child:  Row(
                     children: [
                       CircleAvatar(
                         radius: 30,
@@ -155,7 +175,7 @@ class Home extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Athira',
+                        loginController.currentUser.value.data![0].username!,
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -230,7 +250,6 @@ class Home extends StatelessWidget {
 
               // Adjust the height value according to your preference
 
-// Language Selection Section
 
               const SizedBox(height: 30),
               Padding(
@@ -378,7 +397,7 @@ class Home extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Navigate to ListnersPage when the third item is tapped
+                          // Navigate to ListnersPage when the third item is tpaped
                           Navigator.push(
                             context,
                             MaterialPageRoute(

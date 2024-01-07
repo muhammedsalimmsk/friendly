@@ -2,7 +2,13 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:friendly_talks/calling/homepages.dart';
+import 'package:friendly_talks/home/home.dart';
 import 'package:friendly_talks/registartions/otppage.dart';
+import 'package:get/get.dart';
+
+import '../controller/loginController/LoginController.dart';
+import '../helper/HelperFunction.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -12,14 +18,41 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+
+  LoginController loginController =Get.put(LoginController());
   @override
   void initState() {
+    getUserLoggedInStatus();
+    getUserId();
+    print("called from home page");
+    loginController.fetchDataFromApi(loginController.apiUrl);
     super.initState();
+
     Timer(const Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) => Otppage()),
-      );
+      print(_isSignedIn);
+      Get.to(_isSignedIn? Home(languages: ["english"], language: ["malayalam"]):Otppage());
+    });
+  }
+
+  bool _isSignedIn=false;
+
+  getUserLoggedInStatus()async{
+    await HelperFunction.getUserLoggedInStatus().then((value) {
+      if(value!=null){
+        setState(() {
+          _isSignedIn=value;
+        });
+      }
+    });
+  }
+  getUserId()async{
+    await HelperFunction.getUserIdFromSF().then((value) {
+      if(value!=null){
+        print("userId successfully inited");
+        setState(() {
+          userId=value;
+        });
+      }
     });
   }
 

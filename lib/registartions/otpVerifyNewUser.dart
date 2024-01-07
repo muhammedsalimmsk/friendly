@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:friendly_talks/controller/loginController/OTPController.dart';
-import 'package:friendly_talks/home/home.dart';
+import 'package:friendly_talks/controller/loginController/LoginController.dart';
+import 'package:friendly_talks/registartions/register.dart';
 import 'package:get/get.dart';
 
-class Otpverify extends StatelessWidget {
-  const Otpverify(
-      {super.key, required String mobileNumber, required String countrycode});
+import '../controller/loginController/OTPController.dart';
+
+class OtpVerifyNewUser extends StatelessWidget {
+  const OtpVerifyNewUser({super.key});
+
+
+
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController otpController = TextEditingController();
-
+    OTPController controller = Get.find();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -73,30 +76,21 @@ class Otpverify extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextFormField(
-                            controller: otpController,
+                          TextField(
+                            controller: controller.otpController,
                             keyboardType: TextInputType.number,
                             maxLength: 4,
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => const Home(
-                                    languages: [],
-                                    language: [],
-                                  ),
-                                ),
-                              );
+                              controller.verifyOTP();
                             },
                             child: const Text('Verify OTP'),
                           ),
                           const SizedBox(height: 10),
                           TextButton(
-                            onPressed: () {
-                            },
+                            onPressed: () {},
                             child: const Text('Resend OTP'),
                           ),
                         ],

@@ -3,13 +3,13 @@
 import 'dart:convert';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:friendly_talks/controller/loginController/OTPController.dart';
-import 'package:friendly_talks/registartions/otpverify2.dart';
+import 'package:friendly_talks/registartions/otpVerifyNewUser.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:friendly_talks/api.dart';
 import 'package:friendly_talks/registartions/login.dart';
 import 'package:friendly_talks/registartions/otppage2.dart';
-import 'package:friendly_talks/registartions/otpverify.dart';
+import 'package:friendly_talks/registartions/otpVerifyExitingUser.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data/user_data/user_data.dart';
@@ -46,41 +46,54 @@ class _OtppageState extends State<Otppage> {
       final url =
           'https://friendlytalks.in/admin/api/v1/index.php?token=$API_KEY';
       final response = await http.get(Uri.parse(url));
-      final countrycode=country.substring(1);
-      final compinedMobile="$countrycode$mobileNumber";
+      final countrycode = country.substring(1);
+      final compinedMobile = "$countrycode$mobileNumber";
 
       if (response.statusCode == 200) {
         // final data = response.body;
-        final data= UserData.fromJson(json.decode(response.body));
+        final data = UserData.fromJson(json.decode(response.body));
         if (data.hasMobileNumber(compinedMobile)) {
           print(compinedMobile);
-          Get.to(Otpverify(mobileNumber: mobileNumber, countrycode: country));
+          controller.generateOTP(4);
+          controller.sendOTPToAPI(
+              controller.generatedOTP.value, compinedMobile).whenComplete(() {
+                print("from otppage");
+          Get.to(OtpVerifyExitingUser(mobileNumber: compinedMobile,));});
           print("Mobile number exists in the UserData model.");
         } else {
           controller.generateOTP(4);
-          await controller.sendOTPToAPI(controller.generatedOTP.value, compinedMobile);
-          Get.to(const OtpVerifyNewUser());
+          controller.sendOTPToAPI(
+              controller.generatedOTP.value, compinedMobile).whenComplete(() {
+                print("from otppage2");
+              Get.to( OtpVerifyNewUser()); });
           print("Mobile number does not exist in the UserData model.");
         }
         return data;
         // print('Data from API: $data');
         // Check if the entered mobile number is present in the API response
-
       } else {
         print('Failed to fetch data. Status code: ${response.statusCode}');
       }
     } catch (error) {
       print('Error fetching data: $error');
     }
-
-
   }
+  //
+  // Future otpFunction()async{
+  //    final countrycode = countryCode!.dialCode.substring(1);
+  //   print(countrycode);
+  //   final compinedMobile = "$countrycode${phoneController.text}";
+  //   print(compinedMobile);
+  //   controller.generateOTP(4);
+  //   await controller.sendOTPToAPI(
+  //       controller.generatedOTP.value, compinedMobile);
+  // }
 
   final phoneController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  OTPController controller=Get.put(OTPController());
-  final countryPicker = const  FlCountryCodePicker();
+  OTPController controller = Get.put(OTPController());
+  final countryPicker = const FlCountryCodePicker();
 
   CountryCode? countryCode;
 
@@ -148,31 +161,36 @@ class _OtppageState extends State<Otppage> {
                       const SizedBox(height: 20),
                       Row(
                         children: [
-                          const SizedBox(width: 10,),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           GestureDetector(
-                            onTap:()async{
-                              final code=
-                              await countryPicker.showPicker(context: context);
+                            onTap: () async {
+                              final code = await countryPicker.showPicker(
+                                  context: context);
                               setState(() {
-                                countryCode=code;
+                                countryCode = code;
                               });
                             },
                             child: Row(
                               children: [
                                 Container(
-                                  child:countryCode!=null
+                                  child: countryCode != null
                                       ? countryCode!.flagImage()
-                                      :null,),
-                                SizedBox(width: 10,),
+                                      : null,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 Container(
-                                  padding:const EdgeInsets.symmetric(horizontal: 16,
-                                  vertical: 6),
-                                  decoration:BoxDecoration(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  decoration: BoxDecoration(
                                     color: Colors.black,
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: Text(
-                                    countryCode?.dialCode??"+1",
+                                    countryCode?.dialCode ?? "+1",
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -180,14 +198,13 @@ class _OtppageState extends State<Otppage> {
                             ),
                           ),
                           Container(
-                            padding:const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             width: 200,
                             child: TextFormField(
-                              validator: (val){
-                                if(val==null||val.length <10){
+                              validator: (val) {
+                                if (val == null || val.length < 10) {
                                   return "please enter valid phone number";
-                                }
-                                else {
+                                } else {
                                   return null;
                                 }
                               },
@@ -201,13 +218,12 @@ class _OtppageState extends State<Otppage> {
                           ),
                         ],
                       ),
-
                       const SizedBox(
                         height: 30,
                       ),
                       GestureDetector(
                         onTap: () {
-                          if(_formKey.currentState!.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             fetchData(context, countryCode!.dialCode,
                                 phoneController.text);
                           }
@@ -262,7 +278,7 @@ class _OtppageState extends State<Otppage> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (BuildContext context) =>  Otppage2(),
+                              builder: (BuildContext context) => Otppage2(),
                             ),
                           );
                         },
@@ -292,11 +308,13 @@ class _OtppageState extends State<Otppage> {
     );
   }
 
-
-
-
-
-
-
-
+// registerNewUser(compinedMobile){
+//
+//     return Obx((){
+//       return controller.isLoading.value? ci:Container();
+//       controller.generateOTP(4);
+//       controller.sendOTPToAPI(controller.generatedOTP.value, compinedMobile);
+//       Get.to(const OtpVerifyNewUser());
+//     }
+// }
 }

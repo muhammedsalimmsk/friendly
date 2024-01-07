@@ -1,3 +1,6 @@
+import 'package:friendly_talks/models/user_data/user_data/userData.dart';
+
+import '../../../helper/HelperFunction.dart';
 import 'datum.dart';
 
 class UserData {
@@ -19,21 +22,22 @@ class UserData {
         'status': status,
         'data': data?.map((e) => e.toJson()).toList(),
         'code': code,
-      }; bool hasMobileNumber(String targetMobileNumber) {
+      };
+  bool hasMobileNumber(String targetMobileNumber) {
     // Check if data is not null and not empty
     if (data != null && data!.isNotEmpty) {
       // Iterate through each Datum in the data
       for (var datum in data!) {
         // Check if the mobile number matches the target number
         if (datum.mobile == targetMobileNumber) {
+
+          userId = datum.userId!;
+          HelperFunction.saveUserIdSF(userId);
+          HelperFunction.saveUserLoggedInStatus(true);
           return true; // Mobile number found
         }
       }
     }
     return false; // Mobile number not found
   }
-
-
-
-
 }
